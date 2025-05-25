@@ -1,0 +1,40 @@
+<app-paginator [page]="currentPage" [size]="size" [totalPages]="totalPages" [totalElements]="totalElements"
+    (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
+</app-paginator>
+<p>{{ selectedLicenseIds.size }} records(s) selected</p>
+<table>
+    <thead>
+        <tr>
+            <th>
+                <ng-container>
+                    <label>
+                        <input type="checkbox" [checked]="isAllSelected()"
+                            [indeterminate]="isSomeSelected() && !isAllSelected()" (change)="toggleSelectAll($event)" />
+                        id
+                    </label>
+                </ng-container>
+            </th>
+            <th>license name</th>
+            <th>entity jurisdiction</th>
+            <th>license jurisdiction name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (license of licenseList$ | async; track license.id) {
+            @if (license.id != null) {
+                <tr>
+                    <td>
+                        <label>
+                            <input type="checkbox" [checked]="isLicenseSelected(license.id)"
+                                (change)="toggleSelect(license.id!, $event)" />
+                            {{ license.id }}
+                        </label>
+                    </td>
+                    <td>{{ license.licenseName }}</td>
+                    <td>{{ license.entityJurisdiction }}</td>
+                    <td>{{ license.licenseJurisdictionName }}</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,25 @@
+<div style="display: flex; align-items: center;">
+    <div>
+        <label for="resultsPerPage">results per page</label>
+        <select id="resultsPerPage" [(ngModel)]="size" (change)="onPageSizeChange($event)">
+            @for (pageSizeOption of pageSizeOptions; track $index) {
+            <option [value]="pageSizeOption">{{ pageSizeOption }}</option>
+            }
+        </select>
+    </div>
+    <div>
+        <button (click)="goToFirstPage()" [disabled]="page === 0">first</button>
+    </div>
+    <div>
+        <button (click)="goToPreviousPage()" [disabled]="page === 0">previous</button>
+    </div>
+    <div>
+        <p>{{ page + 1 }} of {{ totalPages }}</p>
+    </div>
+    <div>
+        <button (click)="goToNextPage()" [disabled]="page + 1 >= totalPages">next</button>
+    </div>
+    <div>
+        <button (click)="goToLastPage()" [disabled]="page + 1 >= totalPages">last</button>
+    </div>
+</div>

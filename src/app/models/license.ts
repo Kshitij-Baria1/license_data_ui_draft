@@ -1,0 +1,36 @@
+export interface License {
+    id?: number;
+    licenseName?: string;
+    entityName?: string;
+    entityJurisdiction?: string;
+    licenseTypeCode?: string;
+    licenseJurisdictionType?: string;
+    licenseJurisdictionName?: string;
+    departmentName?: string;
+    licenseNumber?: string;
+    mfrTemplate?: string;
+    doesLicenseExpire?: boolean;
+    expiryDate?: Date;
+    renewalFrequency?: number;
+    licenseNumberChangesOnRenew?: boolean;
+    renewalFee?: number;
+    submitByDate?: Date;
+    managerReminderDays?: number;
+    clientReminderDays?: number;
+    status?: string;
+    filedDate?: Date;
+    approvedDate?: Date;
+    accountNumber?: string;
+    renewalManager?: string;
+    licenseManager?: string;
+    partnerOrderNumber?: string;
+    paymentMethod?: string;
+    filingFee?: number;
+    researchAddress?: string;
+    researchCity?: string;
+    researchCounty?: string;
+    researchState?: string;
+    researchPostalCode?: string;
+    researchCountry?: string;
+    expedite?: boolean;
+}
