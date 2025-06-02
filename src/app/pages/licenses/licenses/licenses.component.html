@@ -1,7 +1,35 @@
 <app-paginator [page]="currentPage" [size]="size" [totalPages]="totalPages" [totalElements]="totalElements"
     (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
 </app-paginator>
-<p>{{ selectedLicenseIds.size }} records(s) selected</p>
+<div>
+    <form (ngSubmit)="onSearch()" #searchForm="ngForm">
+        <div>
+            <label for="licenseName">License name</label>
+            <input id="licenseName" [(ngModel)]="filters.licenseName" name="licenseName">
+        </div>
+        <div>
+            <label for="jurisdictionName">Jurisdiction name</label>
+            <select id="jurisdictionName" [(ngModel)]="filters.entityJurisdiction" name="jurisdictions" multiple>
+                @for (jurisdiction of jurisdictions$ | async; track $index) {
+                <option [value]="jurisdiction.abbreviation">{{ jurisdiction.name }} ({{ jurisdiction.abbreviation }})
+                </option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="licenseJurisdictionName">License jurisdiction name</label>
+            <input id="licenseJurisdictionName" [(ngModel)]="filters.licenseJurisdictionName"
+                name="licenseJurisdictionName">
+        </div>
+        <div>
+            <button type="submit">Search</button>
+        </div>
+        <div>
+            <button type="reset" (click)="onReset()">Reset</button>
+        </div>
+    </form>
+</div>
+<p>{{ selectedLicenseIds.size }} records(s) selected <button (click)="openSelectedLicenses()">View</button></p>
 <table>
     <thead>
         <tr>
@@ -21,20 +49,47 @@
     </thead>
     <tbody>
         @for (license of licenseList$ | async; track license.id) {
-            @if (license.id != null) {
-                <tr>
-                    <td>
-                        <label>
-                            <input type="checkbox" [checked]="isLicenseSelected(license.id)"
-                                (change)="toggleSelect(license.id!, $event)" />
-                            {{ license.id }}
-                        </label>
-                    </td>
-                    <td>{{ license.licenseName }}</td>
-                    <td>{{ license.entityJurisdiction }}</td>
-                    <td>{{ license.licenseJurisdictionName }}</td>
-                </tr>
-            }
+        @if (license.id != null) {
+        <tr>
+            <td>
+                <label>
+                    <input type="checkbox" [checked]="isLicenseSelected(license.id)"
+                        (change)="toggleSelect(license.id!, $event)" />
+                    {{ license.id }}
+                </label>
+            </td>
+            <td>{{ license.licenseName }}</td>
+            <td>{{ license.entityJurisdiction }}</td>
+            <td>{{ license.licenseJurisdictionName }}</td>
+        </tr>
+        }
         }
     </tbody>
 </table>
+
+<dialog #selectedDialog>
+    <form method="dialog">
+        <h3>Selected Licenses ({{ selectedLicenseIds.size }})</h3>
+        <!-- Inside your modal -->
+        <table>
+            <thead>
+                <tr>
+                    <th>License Name</th>
+                    <th>Entity Jurisdiction</th>
+                    <th>License Jurisdiction Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let license of editableSelectedLicenses">
+                    <td><input [(ngModel)]="license.licenseName"  name="licenseName"/></td>
+                    <td><input [(ngModel)]="license.entityJurisdiction"  name="entityJurisdiction"/></td>
+                    <td><input [(ngModel)]="license.licenseJurisdictionName"  name="licenseJurisdictionName"/></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+            <button (click)="selectedDialog.close()">Close</button>
+        </div>
+    </form>
+</dialog>
